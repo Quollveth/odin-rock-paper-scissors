@@ -1,0 +1,66 @@
+.content{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.content >*{
+    margin:5px;
+}
+
+.mid{
+    flex-direction: row;
+}
+
+h2, td, th, p{
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.table-header{
+    text-align: center;
+    height: 50px;
+}
+
+#table-holder{
+    margin-top: 50px;
+}
+
+table,td,th{
+    border: 1px solid rgb(129, 129, 129);
+}
+
+td,th{
+    text-align: center;
+    font-size: small;
+    color: rgb(39, 39, 39);
+}
+
+th{
+    width: 100px;
+}
+
+td{
+    width: 50px;
+}
+
+.hidden >*{
+    display: none;
+    height: 0px;
+    width: 0px;
+}
+
+.victory{
+    color:green;
+    border:green 1px solid;
+}
+
+.defeat{
+    color:crimson;
+    border: crimson 1px solid;
+}
+
+.tie{
+    color:orange;
+    border:orange 1px solid;
+}

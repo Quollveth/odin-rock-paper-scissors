@@ -1,55 +1,52 @@
-let turns = prompt("How many turns?");
-console.log(`playing ${turns} turns`);
 let playerChoice;
 let compScr = 0;
 let plyScr = 0;
+let round = 1;
 
-for(let i=0;i<turns;i++)
-{
+const selectionBtns = document.querySelectorAll('.select');
+const resultField = document.getElementById('result');
+const tableHolder = document.getElementById('table-holder');
+const scoreboard = document.getElementById('scoreboard');
+const score = document.getElementById('scoreboard-title');
 
-    playerChoice = prompt("Rock, Paper or Scissors").toLowerCase();
-    console.log("Player picked: " + playerChoice);
-    let result = playGame(playerChoice);
+resultField.value = '';
+
+selectionBtns.forEach(element =>{
+    element.addEventListener('click',()=>{
+        playGame(element.id);
+    })
+})
+
+
+function playGame(ch1){
+    playerChoice = ch1;
+    let result = checkResult(playerChoice);
 
     switch(result)
     {
         case 1:
-            plyScr++;
-            console.log("player won");
+            resultField.value = 'You Won';
+            resultField.classList.remove("victory","tie","defeat");
+            resultField.classList.add("victory");
             break;
         case -1:
-            compScr++;
-            console.log("computer won")
+            resultField.value = 'You Lost';
+            resultField.classList.remove("victory","tie","defeat");
+            resultField.classList.add("defeat");
             break;
         default:
-            console.log("tie or invalid");
+            resultField.value = 'Tie';
+            resultField.classList.remove("victory","tie","defeat");
+            resultField.classList.add("tie");
     }
+    round++;
 }
 
-if(plyScr>compScr)
+function checkResult(ch1)
 {
-    alert(`You Won! ${plyScr} to ${compScr}`);
-    console.log(`player won by ${plyScr-compScr} points`);
-} else if(plyScr<compScr)
-{
-    alert(`You lost! ${compScr} to ${plyScr}`);
-    console.log(`computer won by ${compScr-plyScr} points`);
-} else 
-{
-    alert(`Tie! ${plyScr} to both sides`);
-    console.log(`Tie! ${plyScr} to both sides`)
-}
-
-function choose()
-{
-    return Math.floor(Math.random()*3)
-}
-
-function playGame(ch1)
-{
-    let computerChoice = choose();
+    let result;
+    let computerChoice = Math.floor(Math.random()*3);
     let ch2 = `${(computerChoice==0)?"scissors":(computerChoice==1)?"paper":"rock"}`;
-    console.log("Computer picked: " + ch2);
 
     switch(ch1)
     {
@@ -57,14 +54,17 @@ function playGame(ch1)
             switch(ch2)
             {
                 case "rock":
-                    alert("Tie!");
-                    return 0;
+                    //tie
+                    result = 0;
+                    break;
                 case "paper":
-                    alert("Paper beats rock, you loose!");
-                    return -1;
+                    //player looses
+                    result = -1;
+                    break;
                 case "scissors":
-                    alert("Rock beats scissors, you win!");
-                    return 1;
+                    //player wins
+                    result = 1;
+                    break;
             }
             break;
         
@@ -72,14 +72,17 @@ function playGame(ch1)
             switch(ch2)
             {
                 case "rock":
-                    alert("Paper beats rock, you win!");
-                    return 1;
+                    //player wins
+                    result = 1;
+                    break;
                 case "paper":
-                    alert("Tie");
-                    return 0;
+                    //tie
+                    result = 0;
+                    break;
                 case "scissors":
-                    alert("Scissors beat paper you loose!");
-                    return -1;
+                    //player looses
+                    result = -1;
+                    break;
             }
             break;
         
@@ -87,19 +90,47 @@ function playGame(ch1)
             switch(ch2)
             {
                 case "rock":
-                    alert("Rock beats scissors, you loose!");
-                    return -1;
+                    //player looses
+                    result = -1;
+                    break;
                 case "paper":
-                    alert("Scissors beat paper, you win!");
-                    return 1;
+                    //player wins
+                    result = 1;
+                    break;
                 case "scissors":
-                    alert("Tie!");
-                    return 0;
+                    //tie
+                    result = 0;
+                    break;
             }
             break;
         
         default:
-            alert("Invalid entry");
-            return 0;
+            //invalid entry, shouldn't happen
+            result = 0;
+            break;
     }
+    updateScore(ch1,ch2,result);
+    return result;
+}
+
+function updateScore(ch1,ch2,r){
+    if(tableHolder.classList.contains("hidden")){
+        tableHolder.classList.remove("hidden");
+    }
+    let row = scoreboard.insertRow(round);
+    let cell = row.insertCell(-1);
+    cell.innerHTML = round;
+    cell = row.insertCell(-1);
+    cell.innerHTML = ch1;
+    cell = row.insertCell(-1);
+    cell.innerHTML = ch2;
+    cell = row.insertCell(-1);
+    cell.innerHTML = (r==1?'player win':r==-1?'computer win':'Tie');
+    
+    if(r==1){
+        plyScr++;
+    } else if(r==-1){
+        compScr++;
+    }
+    score.innerText = `Player: ${plyScr} --- Computer: ${compScr}`;
 }
